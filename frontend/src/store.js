@@ -4,7 +4,6 @@ import api from '@/services/api'
 
 Vue.use(Vuex)
 
-const API_HOST = 'http://localhost:8000'
 
 const authModule = {
   strict: process.env.NODE_ENV !== 'production',
@@ -29,8 +28,9 @@ const authModule = {
   },
   actions: {
     login(context, payload) {
-      return api.post(API_HOST + '/auth/jwt/create/', {
-        'username': payload.usename,
+      // トークン作成
+      return api.post('/auth/jwt/create/', {
+        'username': payload.username,
         'password': payload.password,
       })
       .then(response => {
@@ -44,8 +44,10 @@ const authModule = {
       context.commit('clear')
     },
     reload(context) {
-      return api.get(API_HOST + '/auth/users/me/')
+      return api.get('/auth/users/me/')
       .then(response => {
+        console.log('actions')
+  
         const user = response.data
         context.commit('set', {user: user})
         return user
