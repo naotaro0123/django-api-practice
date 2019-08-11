@@ -29,7 +29,7 @@ pyenv versions
 brew install pipenv
 
 # install library with pipenv => make Pipfile
-pipenv install django djangorestframework pylint
+pipenv install django djangorestframework pylint djangorestframework-simplejwt djoser
 
 # Add setting.json with VS Code.
 // Whether to lint Python files.
