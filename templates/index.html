@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>DRF Sample</title>
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.16/dist/bootstrap-vue.min.css"/>
+  <style>
+  main.container {
+    border: 1px solid #ccc;
+    margin-top: 4em;
+    padding: 2em;
+    width: 600px;
+  }
+
+  .container.debug { 
+    margin-top: 2em;
+  }
+
+  [v-cloak] {
+    display: none;
+  }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <div id="header">
+      <b-navbar type="dark" variant="dark">
+        <a href="/" class="navbar-brand">DRF Sample</a>
+        <b-navbar-nav class="ml-auto">
+          {% if user.is_authenticated %}
+          <b-nav-item-dropdown right>
+            <template slot="button-content">
+              {{  user.get_username }}
+            </template>
+            <b-dropdown-item href="{% url 'rest_framework:logout' %}">
+              ログアウト
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+          {% else %}
+          <b-nav-item href="{% url 'rest_framework:login' %}">
+            ログイン
+          </b-nav-item>
+          {% endif %}
+        </b-navbar-nav>
+      </b-navbar>
+    </div>
+
+    <!-- メッセージエリア -->
+    <div id="messages">
+      <b-alert variant="danger" show v-show="message.error" class="mb-0">
+        #{ message.error }
+      </b-alert>
+      <b-alert variant="warning" show v-show="message.warnings.length > 0" class="mb-0">
+        <p v-for="waring in message.warnings" class="mb-0">
+          #{ warning }
+        </p>
+      </b-alert>
+      <b-alert variant="info" show v-show="message.info" class="mb-0">
+        #{ message.info }
+      </b-alert>
+    </div>
+
+    <!-- メインエリア -->
+    <div id="main-page">
+      <main class="container">
+        <p class="h5 mb-4">ホーム</p>
+        <b-form @submit.prevent="submitSave">
+          <div class="row form-group">
+            <label class="col-sm-3 col-form-label">タイトル</label>
+            <div class="col-sm-8">
+              <input type="text" v-model="form.book.title" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-sm-3 col-form-label">価格</label>
+            <div class="col-sm-8">
+              <input type="text" v-model="form.book.price" class="form-control">
+            </div>
+          </div>
+          <div class="text-center row mt-5">
+            <div class="col-sm-12">
+              <b-button type="submit" variant="primary">
+                #{ isCreated ? '更新' : '登録'}
+              </b-button>
+            </div>
+          </div>
+        </b-form>
+      </main>
+    </div>
+
+    <!-- デバッグ -->
+    <div id="debug">
+      <div class="container debug">
+        <pre>
+          #{ $data }
+        </pre>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/@babel/polyfill@7.4.3/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.16/dist/bootstrap-vue.min.js"></script>
+    <script src="http://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+    <script src="./static/index.js"></script>
+  </div>
+</body>
+</html>
